@@ -6,10 +6,10 @@ namespace KerbalParser
 {
 	public class Parser
 	{
-		private static KerbalNode _currentNode;
-		private static int _lineNumber;
+		private KerbalNode _currentNode;
+		private int _lineNumber;
 
-		public static IList<KerbalNode> ParseConfig(String configFile)
+		public IList<KerbalNode> ParseConfig(String configFile)
 		{
 			IList<KerbalNode> kerbalNodes = new List<KerbalNode>();
 
@@ -24,7 +24,7 @@ namespace KerbalParser
 			return kerbalNodes;
 		}
 
-		public static KerbalNode ParseTree(StreamReader sr)
+		public KerbalNode ParseTree(StreamReader sr)
 		{
 			KerbalNode node = null;
 

@@ -13,7 +13,8 @@ namespace KerbalParserTests
 		public void Init()
 		{
 			const string file = "..\\..\\testdata\\simple.cfg";
-			_kerbalTree = Parser.ParseConfig(file);
+			var parser = new Parser();
+			_kerbalTree = parser.ParseConfig(file);
 		}
 
 		[TearDown]
@@ -28,7 +29,7 @@ namespace KerbalParserTests
 			Assert.IsInstanceOf<IList<KerbalNode>>(_kerbalTree);
 		}
 
-		[Test]
+		[Test][Ignore]
 		public void GenericParse()
 		{
 			Assert.IsNotEmpty(_kerbalTree);
