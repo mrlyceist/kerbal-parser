@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -11,23 +10,20 @@ namespace KerbalParser
 		{
 			Name = name;
 			Parent = parent;
+			Values = new Dictionary<string, string>();
+			Children = new List<KerbalNode>();
 		}
 
-		[DataMember]
+		[DataMember(Order = 1)]
 		public string Name { get; set; }
 
-		[DataMember]
 		public KerbalNode Parent { get; set; }
 
-		public IDictionary<string, string> Values
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[DataMember(Order = 3)]
+		public IDictionary<string, string> Values { get; set; }
 
-		public IList<KerbalNode> Children
-		{
-			get { throw new NotImplementedException(); }
-		}
+		[DataMember(Order = 4)]
+		public IList<KerbalNode> Children { get; set; }
 
 		public override string ToString()
 		{

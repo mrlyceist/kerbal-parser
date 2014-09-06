@@ -43,8 +43,6 @@ namespace KerbalParser
 					continue;
 				}
 
-				Console.WriteLine(_lineNumber + ": " + line);
-
 				if (line.Trim().Contains("{"))
 				{
 					var tokens = line.Trim().Split('{');
@@ -60,7 +58,7 @@ namespace KerbalParser
 						else
 						{
 							throw new Exception(
-								"Parse error: " + "Line: " +
+								"Parse error: Unexpected '{' at: " +
 								_lineNumber + " " + line
 								);
 						}
@@ -68,11 +66,58 @@ namespace KerbalParser
 
 					node = new KerbalNode(nodeName, _currentNode);
 
+					if (_currentNode != null)
+					{
+						_currentNode.Children.Add(node);
+					}
+
 					_currentNode = node;
 
-					Console.WriteLine(">> GOING DEEPER! : " + node);
-					Console.WriteLine(">> CURRENT NODE : " + _currentNode.Name);
 					ParseTree(sr);
+				}
+
+				if (line.Trim().Contains("="))
+				{
+					var tokens = line.Trim().Split('=');
+
+					if (tokens.Length != 2)
+					{
+						throw new Exception(
+							"Parse error: Unexpected '=' sign at: " +
+							_lineNumber + ", " + line);
+					}
+
+					var property = tokens[0].Trim();
+					var value = tokens[1].Trim();
+
+					if (String.IsNullOrEmpty(property) ||
+					    String.IsNullOrEmpty(value))
+					{
+						throw new Exception(
+							"Parse error: Unexpected '=' sign at: " +
+							_lineNumber + ", " + line);
+					}
+
+					if (_currentNode == null)
+					{
+						throw new Exception(
+							"Parse error: Unexpected property/value outside" +
+							"node at: " + _lineNumber + ", " + line);
+					}
+
+					_currentNode.Values.Add(property, value);
+				}
+
+				if (line.Trim().Contains("}"))
+				{
+					if (_currentNode == null)
+					{
+						throw new Exception(
+							"Parse error: Unexpected '}' sign at:" +
+							_lineNumber + ", " + line);
+					}
+
+					_currentNode = _currentNode.Parent;
 				}
 
 				previousLine = line;
