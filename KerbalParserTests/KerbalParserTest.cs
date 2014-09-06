@@ -8,34 +8,34 @@ namespace KerbalParserTests
 	[TestFixture]
 	internal class KerbalParserTest
 	{
-		private IList<KerbalNode> _kerbalTree;
+		private KerbalConfig _kerbalConfig;
 
 		[SetUp]
 		public void Init()
 		{
 			const string file = "..\\..\\testdata\\simple.cfg";
 			var parser = new Parser();
-			_kerbalTree = parser.ParseConfig(file);
+			_kerbalConfig = parser.ParseConfig(file);
 		}
 
 		[TearDown]
 		public void CleanUp()
 		{
-			_kerbalTree = null;
+			_kerbalConfig = null;
 		}
 
 		[Test]
 		public void CreateParser()
 		{
-			Assert.IsInstanceOf<IList<KerbalNode>>(_kerbalTree);
+			Assert.IsInstanceOf<KerbalConfig>(_kerbalConfig);
 		}
 
 		[Test]
 		public void GenericParse()
 		{
-			Assert.IsNotEmpty(_kerbalTree);
+			Assert.IsNotEmpty(_kerbalConfig);
 
-			foreach (var kerbalNode in _kerbalTree)
+			foreach (var kerbalNode in _kerbalConfig)
 			{
 				Console.WriteLine(kerbalNode);
 
@@ -51,7 +51,7 @@ namespace KerbalParserTests
 		[Test]
 		public void SimpleParse()
 		{
-			var node = _kerbalTree[0];
+			var node = _kerbalConfig.First();
 
 			Assert.IsTrue(
 			              node.Values.Count == 24,

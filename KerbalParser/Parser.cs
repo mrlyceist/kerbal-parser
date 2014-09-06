@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace KerbalParser
@@ -9,9 +8,9 @@ namespace KerbalParser
 		private KerbalNode _currentNode;
 		private int _lineNumber;
 
-		public IList<KerbalNode> ParseConfig(String configFile)
+		public KerbalConfig ParseConfig(String configFile)
 		{
-			IList<KerbalNode> kerbalNodes = new List<KerbalNode>();
+			var kerbalNodes = new KerbalConfig(configFile);
 
 			var sr = new StreamReader(configFile);
 			KerbalNode kerbalNode;
