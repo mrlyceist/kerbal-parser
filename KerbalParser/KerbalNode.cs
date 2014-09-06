@@ -1,26 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace KerbalParser
 {
-	public class KerbalParser
-	{
-		public static IList<KerbalNode> ParseConfig(String configFile)
-		{
-			IList<KerbalNode> kerbalNodes = new List<KerbalNode>();
-
-			return kerbalNodes;
-		}
-	}
-
+	[DataContract]
 	public class KerbalNode
 	{
-		public KerbalNode(string name)
+		public KerbalNode(string name, KerbalNode parent = null)
 		{
 			Name = name;
+			Parent = parent;
 		}
 
+		[DataMember]
 		public string Name { get; set; }
+
+		[DataMember]
+		public KerbalNode Parent { get; set; }
 
 		public IDictionary<string, string> Values
 		{
@@ -30,6 +27,11 @@ namespace KerbalParser
 		public IList<KerbalNode> Children
 		{
 			get { throw new NotImplementedException(); }
+		}
+
+		public override string ToString()
+		{
+			return JsonSerializer.To(this);
 		}
 	}
 }
