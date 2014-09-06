@@ -1,4 +1,3 @@
-﻿using System.Collections;
 using System.Collections.Generic;
 using KerbalParser;
 using NUnit.Framework;
@@ -8,29 +7,40 @@ namespace KerbalParserTests
 	[TestFixture]
 	internal class KerbalParserTest
 	{
+		private IList<KerbalNode> _kerbalTree;
+
+		[SetUp]
+		public void Init()
+		{
+			const string file = "..\\..\\testdata\\simple.cfg";
+			_kerbalTree = Parser.ParseConfig(file);
+		}
+
+		[TearDown]
+		public void CleanUp()
+		{
+			_kerbalTree = null;
+		}
+
 		[Test]
 		public void CreateParser()
 		{
-			const string file = "Hello World";
-			var kp = KerbalParser.KerbalParser.ParseConfig(file);
-
-			Assert.IsInstanceOf<IList<KerbalNode>>(kp);
+			Assert.IsInstanceOf<IList<KerbalNode>>(_kerbalTree);
 		}
 
 		[Test]
 		public void GenericParse()
 		{
-			const string file = "testdata\\simple.cfg";
+			Assert.IsNotEmpty(_kerbalTree);
 
-			var kp = KerbalParser.KerbalParser.ParseConfig(file);
-
-			Assert.IsNotEmpty(kp);
-
-			foreach (var kerbalNode in kp)
+			foreach (var kerbalNode in _kerbalTree)
 			{
-				Assert.IsNotNullOrEmpty(kerbalNode.Name);
-				Assert.IsInstanceOf<IDictionary<string, string>>(kerbalNode.Values);
-				Assert.IsInstanceOf<IList<KerbalNode>>(kerbalNode.Children);
+				Assert.IsNotNullOrEmpty
+					(kerbalNode.Name);
+				Assert.IsInstanceOf<IDictionary<string, string>>
+					(kerbalNode.Values);
+				Assert.IsInstanceOf<IList<KerbalNode>>
+					(kerbalNode.Children);
 			}
 		}
 	}
