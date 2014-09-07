@@ -4,6 +4,10 @@ using System.Text.RegularExpressions;
 
 namespace KerbalParser
 {
+	/// <summary>
+	/// Parser instance for generating KerbalConfig objects.
+	/// User <code>ParseConfig</code> member to generate data from a cfg.
+	/// </summary>
 	public class Parser
 	{
 		private int _lineNumber;
