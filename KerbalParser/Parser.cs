@@ -28,6 +28,7 @@ namespace KerbalParser
 
 			string line;
 			string previousLine = null;
+			var depth = 0;
 
 			while ((line = sr.ReadLine()) != null)
 			{
@@ -64,9 +65,11 @@ namespace KerbalParser
 					var parentNode = node;
 
 					node = new KerbalNode(nodeName, parentNode);
+
+					depth++;
 				}
 
-				if (line.Trim().Contains("="))
+				else if (line.Trim().Contains("="))
 				{
 					var tokens = line.Trim().Split('=');
 
@@ -98,7 +101,7 @@ namespace KerbalParser
 					node.Values.Add(property, value);
 				}
 
-				if (line.Trim().Contains("}"))
+				else if (line.Trim().Contains("}"))
 				{
 					if (node == null)
 					{
@@ -106,6 +109,8 @@ namespace KerbalParser
 							"Parse error: Unexpected '}' sign at:" +
 							_lineNumber + ", " + line);
 					}
+
+					depth--;
 
 					// Reached the end of current tree start reading the
 					// next one.
@@ -119,6 +124,14 @@ namespace KerbalParser
 
 				previousLine = line;
 			}
+
+			if (depth > 0)
+			{
+				throw new Exception(
+					"Parse Error: Missing matching bracket at: " +
+					_lineNumber);
+			}
+
 			return node;
 		}
 	}

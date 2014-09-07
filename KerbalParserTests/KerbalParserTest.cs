@@ -128,4 +128,19 @@ namespace KerbalParserTests
 			Assert.AreEqual(2, childTwo.Values.Count);
 		}
 	}
+
+	[TestFixture]
+	public class FailureTests
+	{
+		[Test]
+		[ExpectedException(typeof (Exception),
+			ExpectedMessage = "matching bracket",
+			MatchType = MessageMatch.Contains)]
+		public void MismatchBrackets()
+		{
+			const string file = "..\\..\\testdata\\fail\\mismatch.cfg";
+			var parser = new Parser();
+			parser.ParseConfig(file);
+		}
+	}
 }
