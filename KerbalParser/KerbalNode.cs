@@ -12,6 +12,8 @@ namespace KerbalParser
 			Parent = parent;
 			Values = new Dictionary<string, string>();
 			Children = new List<KerbalNode>();
+
+			if (Parent != null) Parent.Children.Add(this);
 		}
 
 		[DataMember(Order = 1)]

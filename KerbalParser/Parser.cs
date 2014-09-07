@@ -5,29 +5,27 @@ namespace KerbalParser
 {
 	public class Parser
 	{
-		private KerbalNode _currentNode;
 		private int _lineNumber;
 
 		public KerbalConfig ParseConfig(String configFile)
 		{
-			var kerbalNodes = new KerbalConfig(configFile);
+			var kerbalConfig = new KerbalConfig(configFile);
 
 			var sr = new StreamReader(configFile);
 			KerbalNode kerbalNode;
 
 			while ((kerbalNode = ParseTree(sr)) != null)
 			{
-				kerbalNodes.Add(kerbalNode);
+				kerbalConfig.Add(kerbalNode);
 			}
 
-			return kerbalNodes;
+			return kerbalConfig;
 		}
 
 		public KerbalNode ParseTree(StreamReader sr)
 		{
 			KerbalNode node = null;
 
-			// Start reading the first line
 			string line;
 			string previousLine = null;
 
@@ -63,16 +61,9 @@ namespace KerbalParser
 						}
 					}
 
-					node = new KerbalNode(nodeName, _currentNode);
+					var parentNode = node;
 
-					if (_currentNode != null)
-					{
-						_currentNode.Children.Add(node);
-					}
-
-					_currentNode = node;
-
-					ParseTree(sr);
+					node = new KerbalNode(nodeName, parentNode);
 				}
 
 				if (line.Trim().Contains("="))
@@ -97,26 +88,33 @@ namespace KerbalParser
 							_lineNumber + ", " + line);
 					}
 
-					if (_currentNode == null)
+					if (node == null)
 					{
 						throw new Exception(
 							"Parse error: Unexpected property/value outside" +
 							"node at: " + _lineNumber + ", " + line);
 					}
 
-					_currentNode.Values.Add(property, value);
+					node.Values.Add(property, value);
 				}
 
 				if (line.Trim().Contains("}"))
 				{
-					if (_currentNode == null)
+					if (node == null)
 					{
 						throw new Exception(
 							"Parse error: Unexpected '}' sign at:" +
 							_lineNumber + ", " + line);
 					}
 
-					_currentNode = _currentNode.Parent;
+					// Reached the end of current tree start reading the
+					// next one.
+					if (node.Parent == null)
+					{
+						return node;
+					}
+
+					node = node.Parent;
 				}
 
 				previousLine = line;
