@@ -93,7 +93,7 @@ namespace KerbalParser
 				{
 					var tokens = line.Trim().Split('=');
 
-					if (tokens.Length != 2)
+					if (tokens.Length < 2)
 					{
 						throw new Exception(
 							"Parse error: Unexpected '=' sign at: " +
@@ -116,8 +116,7 @@ namespace KerbalParser
 					var property = tokens[0].Trim();
 					var value = tokens[1].Trim();
 
-					if (String.IsNullOrEmpty(property) ||
-					    String.IsNullOrEmpty(value))
+					if (String.IsNullOrEmpty(property))
 					{
 						throw new Exception(
 							"Parse error: Unexpected '=' sign at: " +

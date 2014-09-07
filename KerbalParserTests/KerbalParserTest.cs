@@ -253,5 +253,14 @@ namespace KerbalParserTests
 
 			Assert.AreEqual(0, childFour.Values.Count);
 		}
+
+		[Test]
+		public void EmptyValue()
+		{
+			var node = _kerbalConfig.First();
+
+			Assert.IsTrue(node.Values.ContainsKey("author"));
+			Assert.IsTrue(node.Values["author"] == "");
+		}
 	}
 }
