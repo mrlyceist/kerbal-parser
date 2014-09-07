@@ -77,10 +77,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="testdata\complex.cfg" />
     <None Include="testdata\fail\invalidnodename.cfg" />
     <None Include="testdata\fail\mismatch.cfg" />
     <None Include="testdata\multi.cfg" />
     <None Include="testdata\simple.cfg" />
+    <None Include="testdata\techtree.cfg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KerbalParser\KerbalParser.csproj">

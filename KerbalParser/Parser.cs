@@ -7,6 +7,7 @@ namespace KerbalParser
 	public class Parser
 	{
 		private int _lineNumber;
+		private string _currentLine;
 
 		public KerbalConfig ParseConfig(String configFile)
 		{
@@ -34,6 +35,7 @@ namespace KerbalParser
 			while ((line = sr.ReadLine()) != null)
 			{
 				_lineNumber++;
+				_currentLine = line; // Used for error info only
 
 				// Ignore comments and empty lines
 				if (line.Trim().StartsWith("//") ||
@@ -58,7 +60,7 @@ namespace KerbalParser
 						{
 							throw new Exception(
 								"Parse error: Unexpected '{' at: " +
-								_lineNumber + " " + line
+								_lineNumber + " " + _currentLine
 								);
 						}
 					}
@@ -67,8 +69,13 @@ namespace KerbalParser
 					{
 						throw new Exception(
 							"Parse error: Invalid node name \"" + nodeName +
-							"\" at, " + _lineNumber + ": " + line
+							"\" at, " + _lineNumber + ": " + _currentLine
 							);
+					}
+
+					if (tokens.Length > 1)
+					{
+						line = tokens[1];
 					}
 
 					var parentNode = node;
@@ -78,7 +85,7 @@ namespace KerbalParser
 					depth++;
 				}
 
-				else if (line.Trim().Contains("="))
+				if (line.Trim().Contains("="))
 				{
 					var tokens = line.Trim().Split('=');
 
@@ -86,7 +93,20 @@ namespace KerbalParser
 					{
 						throw new Exception(
 							"Parse error: Unexpected '=' sign at: " +
-							_lineNumber + ", " + line);
+							_lineNumber + ", " + _currentLine);
+					}
+
+					if (tokens[1].Contains("}"))
+					{
+						var subtokens = tokens[1].Trim().Split('}');
+						tokens[1] = subtokens[0];
+						if (subtokens.Length > 2)
+						{
+							throw new Exception(
+								"Parse error: Unexpected '}' sign at: " +
+								_lineNumber + ", " + _currentLine);
+						}
+						line = "}" + subtokens[1];
 					}
 
 					var property = tokens[0].Trim();
@@ -97,26 +117,26 @@ namespace KerbalParser
 					{
 						throw new Exception(
 							"Parse error: Unexpected '=' sign at: " +
-							_lineNumber + ", " + line);
+							_lineNumber + ", " + _currentLine);
 					}
 
 					if (node == null)
 					{
 						throw new Exception(
 							"Parse error: Unexpected property/value outside" +
-							"node at: " + _lineNumber + ", " + line);
+							"node at: " + _lineNumber + ", " + _currentLine);
 					}
 
 					node.Values.Add(property, value);
 				}
 
-				else if (line.Trim().Contains("}"))
+				if (line.Trim().Contains("}"))
 				{
 					if (node == null)
 					{
 						throw new Exception(
 							"Parse error: Unexpected '}' sign at:" +
-							_lineNumber + ", " + line);
+							_lineNumber + ", " + _currentLine);
 					}
 
 					depth--;
