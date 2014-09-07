@@ -133,14 +133,34 @@ namespace KerbalParserTests
 	public class FailureTests
 	{
 		[Test]
-		[ExpectedException(typeof (Exception),
+		[ExpectedException(
+			typeof (Exception),
 			ExpectedMessage = "matching bracket",
-			MatchType = MessageMatch.Contains)]
+			MatchType = MessageMatch.Contains,
+			Handler = "HandlerMethod")]
 		public void MismatchBrackets()
 		{
 			const string file = "..\\..\\testdata\\fail\\mismatch.cfg";
 			var parser = new Parser();
 			parser.ParseConfig(file);
+		}
+
+		[Test]
+		[ExpectedException(
+			typeof(Exception),
+			ExpectedMessage = "Invalid node name",
+			MatchType = MessageMatch.Contains,
+			Handler = "HandlerMethod")]
+		public void InvalidNodeName()
+		{
+			const string file = "..\\..\\testdata\\fail\\invalidnodename.cfg";
+			var parser = new Parser();
+			parser.ParseConfig(file);
+		}
+
+		public void HandlerMethod(Exception e)
+		{
+			Console.WriteLine(e.Message);
 		}
 	}
 }

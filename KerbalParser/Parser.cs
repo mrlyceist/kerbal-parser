@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace KerbalParser
 {
@@ -60,6 +61,14 @@ namespace KerbalParser
 								_lineNumber + " " + line
 								);
 						}
+					}
+
+					if (!ValidateNodeName(nodeName))
+					{
+						throw new Exception(
+							"Parse error: Invalid node name \"" + nodeName +
+							"\" at, " + _lineNumber + ": " + line
+							);
 					}
 
 					var parentNode = node;
@@ -133,6 +142,11 @@ namespace KerbalParser
 			}
 
 			return node;
+		}
+
+		private static bool ValidateNodeName(string nodeName)
+		{
+			return Regex.IsMatch(nodeName.Trim(), @"^[a-zA-Z]+$");
 		}
 	}
 }
