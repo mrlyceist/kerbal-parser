@@ -127,7 +127,8 @@ namespace KerbalParser
 							"node at: " + _lineNumber + ", " + _currentLine);
 					}
 
-					node.Values.Add(property, value);
+					if (!node.Values.ContainsKey(property))
+						node.Values.Add(property, value);
 				}
 
 				if (line.Trim().Contains("}"))

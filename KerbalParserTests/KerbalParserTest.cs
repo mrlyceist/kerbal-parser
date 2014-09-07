@@ -158,6 +158,24 @@ namespace KerbalParserTests
 			parser.ParseConfig(file);
 		}
 
+		[Test]
+		public void DuplicateValues()
+		{
+			const string file = "..\\..\\testdata\\fail\\duplicatevalues.cfg";
+			var parser = new Parser();
+			var kc = parser.ParseConfig(file);
+
+			var tree = kc.First();
+
+			Assert.AreEqual(4, tree.Values.Count);
+			Assert.IsTrue(tree.Values.ContainsKey("name"));
+			Assert.IsTrue(tree.Values.ContainsKey("module"));
+			Assert.IsTrue(tree.Values.ContainsKey("author"));
+			Assert.IsTrue(tree.Values.ContainsKey("description"));
+			Assert.IsTrue(tree.Values["name"] == "batteryBankMini");
+			Assert.IsTrue(tree.Values["author"] == "Squad");
+		}
+
 		public void HandlerMethod(Exception e)
 		{
 			Console.WriteLine(e.Message);

@@ -78,6 +78,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="testdata\complex.cfg" />
+    <None Include="testdata\fail\duplicatevalues.cfg" />
     <None Include="testdata\fail\invalidnodename.cfg" />
     <None Include="testdata\fail\mismatch.cfg" />
     <None Include="testdata\multi.cfg" />
