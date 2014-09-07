@@ -53,35 +53,79 @@ namespace KerbalParserTests
 		{
 			var node = _kerbalConfig.First();
 
-			Assert.IsTrue(
-			              node.Values.Count == 24,
-			              "Incorrect number of values. Expected 24, Was : " +
-			              node.Values.Count
-				);
-			Assert.IsTrue(
-			              node.Children.Count == 2,
-			              "Incorrect number of children. Expected 2, Was : " +
-			              node.Children.Count
-				);
+			Assert.AreEqual(24, node.Values.Count);
+			Assert.AreEqual(2, node.Children.Count);
 
 			var childOne = node.Children[0];
 			var childTwo = node.Children[1];
 
 			Console.Write(childOne);
+			Console.WriteLine();
 
-			Assert.IsTrue(
-			              childOne.Values.Count == 3,
-			              "Incorrect number of values in child. Expected 3, " +
-			              "was " + childOne.Values.Count
-				);
+			Assert.AreEqual(3, childOne.Values.Count);
 
 			Console.Write(childTwo);
+			Console.WriteLine();
 
-			Assert.IsTrue(
-			              childTwo.Values.Count == 2,
-			              "Incorrect number of values in child. Expected 2, " +
-			              "was " + childTwo.Values.Count
-				);
+			Assert.AreEqual(2, childTwo.Values.Count);
+		}
+	}
+
+	[TestFixture]
+	public class MultiTreeParserTests
+	{
+		private KerbalConfig _kerbalConfig;
+
+		[SetUp]
+		public void Init()
+		{
+			const string file = "..\\..\\testdata\\multi.cfg";
+			var parser = new Parser();
+			_kerbalConfig = parser.ParseConfig(file);
+		}
+
+		[TearDown]
+		public void CleanUp()
+		{
+			_kerbalConfig = null;
+		}
+
+		[Test]
+		public void BasicMultiTreeParse()
+		{
+			foreach (var tree in _kerbalConfig)
+			{
+				Console.WriteLine(tree);
+				Console.WriteLine();
+			}
+			Assert.AreEqual(2, _kerbalConfig.Count);
+		}
+
+		[Test]
+		public void ValidMultiTreeParse()
+		{
+			foreach (var tree in _kerbalConfig)
+			{
+				Console.WriteLine(tree);
+				Console.WriteLine();
+			}
+
+			var treeTwo = _kerbalConfig[1];
+
+			Assert.AreEqual(3, treeTwo.Values.Count);
+			Assert.AreEqual(2, treeTwo.Children.Count);
+
+			var childOne = treeTwo.Children[0];
+			var childTwo = treeTwo.Children[1];
+
+			Console.WriteLine(childOne);
+			Console.WriteLine();
+
+			Assert.AreEqual(1, childOne.Values.Count);
+
+			Console.WriteLine(childTwo);
+
+			Assert.AreEqual(2, childTwo.Values.Count);
 		}
 	}
 }
