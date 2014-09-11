@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -130,8 +131,7 @@ namespace KerbalParser
 							"node at: " + _lineNumber + ", " + _currentLine);
 					}
 
-					if (!node.Values.ContainsKey(property))
-						node.Values.Add(property, value);
+					AddItems(property, value, node.Values);
 				}
 
 				if (line.Trim().Contains("}"))
@@ -171,6 +171,22 @@ namespace KerbalParser
 		private static bool ValidateNodeName(string nodeName)
 		{
 			return Regex.IsMatch(nodeName.Trim(), @"^[a-zA-Z]+$");
+		}
+
+		private static void AddItems(
+			string key,
+			string value,
+			IDictionary<string, List<string>> dictionary)
+		{
+			if (dictionary.ContainsKey(key) && dictionary[key] != null)
+			{
+				dictionary[key].Add(value);
+			}
+			else
+			{
+				var values = new List<string> { value };
+				dictionary.Add(key, values);
+			}
 		}
 	}
 }

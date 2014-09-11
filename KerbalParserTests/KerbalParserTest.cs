@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KerbalParser;
 using NUnit.Framework;
 
@@ -41,7 +42,7 @@ namespace KerbalParserTests
 
 				Assert.IsNotNullOrEmpty
 					(kerbalNode.Name);
-				Assert.IsInstanceOf<IDictionary<string, string>>
+				Assert.IsInstanceOf<IDictionary<string, List<string>>>
 					(kerbalNode.Values);
 				Assert.IsInstanceOf<IList<KerbalNode>>
 					(kerbalNode.Children);
@@ -172,8 +173,13 @@ namespace KerbalParserTests
 			Assert.IsTrue(tree.Values.ContainsKey("module"));
 			Assert.IsTrue(tree.Values.ContainsKey("author"));
 			Assert.IsTrue(tree.Values.ContainsKey("description"));
-			Assert.IsTrue(tree.Values["name"] == "batteryBankMini");
-			Assert.IsTrue(tree.Values["author"] == "Squad");
+			Assert.AreEqual(3, tree.Values["name"].Count);
+			Assert.AreEqual(2, tree.Values["author"].Count);
+			Assert.IsTrue(tree.Values["name"].First() == "batteryBankMini");
+			Assert.IsTrue(tree.Values["name"][1] == "batteryBankMini2");
+			Assert.IsTrue(tree.Values["name"][2] == "spice");
+			Assert.IsTrue(tree.Values["author"].First() == "Squad");
+			Assert.IsTrue(tree.Values["author"][1] == "Bob");
 		}
 
 		public void HandlerMethod(Exception e)
@@ -260,7 +266,7 @@ namespace KerbalParserTests
 			var node = _kerbalConfig.First();
 
 			Assert.IsTrue(node.Values.ContainsKey("author"));
-			Assert.IsTrue(node.Values["author"] == "");
+			Assert.IsTrue(node.Values["author"].First() == "");
 		}
 	}
 }

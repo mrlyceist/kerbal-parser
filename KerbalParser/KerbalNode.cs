@@ -10,7 +10,7 @@ namespace KerbalParser
 		{
 			Name = name;
 			Parent = parent;
-			Values = new Dictionary<string, string>();
+			Values = new Dictionary<string, List<string>>();
 			Children = new List<KerbalNode>();
 
 			if (Parent != null) Parent.Children.Add(this);
@@ -22,7 +22,7 @@ namespace KerbalParser
 		public KerbalNode Parent { get; set; }
 
 		[DataMember(Order = 3)]
-		public IDictionary<string, string> Values { get; set; }
+		public IDictionary<string, List<string>> Values { get; set; }
 
 		[DataMember(Order = 4)]
 		public IList<KerbalNode> Children { get; set; }

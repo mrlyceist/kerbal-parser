@@ -16,7 +16,7 @@ namespace KerbalParser
 		public KerbalConfig(string fileName, IList<KerbalNode> nodes = null)
 		{
 			FileName = fileName;
-			Nodes = new List<KerbalNode>();
+			Nodes = nodes ?? new List<KerbalNode>();
 		}
 
 		public KerbalNode First()
