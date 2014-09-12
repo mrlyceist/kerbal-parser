@@ -181,6 +181,8 @@ namespace KerbalParserTests
 
 			var tree = kc.First();
 
+			Console.WriteLine(tree);
+
 			Assert.AreEqual(4, tree.Values.Count);
 			Assert.IsTrue(tree.Values.ContainsKey("name"));
 			Assert.IsTrue(tree.Values.ContainsKey("module"));
