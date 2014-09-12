@@ -160,6 +160,19 @@ namespace KerbalParserTests
 		}
 
 		[Test]
+		[ExpectedException(
+			typeof (Exception),
+			ExpectedMessage = "Invalid node name",
+			MatchType = MessageMatch.Contains,
+			Handler = "HandlerMethod")]
+		public void DuplicateBrackets()
+		{
+			const string file = "..\\..\\testdata\\fail\\duplicatebrackets.cfg";
+			var parser = new Parser();
+			parser.ParseConfig(file);
+		}
+
+		[Test]
 		public void DuplicateValues()
 		{
 			const string file = "..\\..\\testdata\\fail\\duplicatevalues.cfg";

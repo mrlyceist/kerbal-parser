@@ -145,6 +145,10 @@ namespace KerbalParser
 
 					depth--;
 
+					// Remove first leading bracket
+					if (line.Trim().Substring(0, 1).Equals("}"))
+						line = line.Trim().Substring(1);
+
 					// Reached the end of current tree start reading the
 					// next one.
 					if (node.Parent == null)
