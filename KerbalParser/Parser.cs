@@ -16,14 +16,26 @@ namespace KerbalParser
 
 		public KerbalConfig ParseConfig(String configFile)
 		{
+			_lineNumber = 0;
+			_currentLine = null;
+
 			var kerbalConfig = new KerbalConfig(configFile);
 
 			var sr = new StreamReader(configFile);
-			KerbalNode kerbalNode;
 
-			while ((kerbalNode = ParseTree(sr)) != null)
+			try
 			{
-				kerbalConfig.Add(kerbalNode);
+				KerbalNode kerbalNode;
+				while ((kerbalNode = ParseTree(sr)) != null)
+				{
+					kerbalConfig.Add(kerbalNode);
+				}
+			}
+			catch (Exception e)
+			{
+				throw new Exception(
+					e.Message + "\nFile: " +
+					kerbalConfig.FileName);
 			}
 
 			return kerbalConfig;
