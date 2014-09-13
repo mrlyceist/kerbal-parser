@@ -83,6 +83,7 @@
     <None Include="testdata\fail\invalidnodename.cfg" />
     <None Include="testdata\fail\mismatch.cfg" />
     <None Include="testdata\multi.cfg" />
+    <None Include="testdata\headless.cfg" />
     <None Include="testdata\simple.cfg" />
     <None Include="testdata\techtree.cfg" />
   </ItemGroup>

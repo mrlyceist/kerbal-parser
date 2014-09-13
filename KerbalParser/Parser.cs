@@ -14,11 +14,13 @@ namespace KerbalParser
 	{
 		private int _lineNumber;
 		private string _currentLine;
+		private string _configFile;
 
 		public KerbalConfig ParseConfig(String configFile)
 		{
 			_lineNumber = 0;
 			_currentLine = null;
+			_configFile = configFile;
 
 			var kerbalConfig = new KerbalConfig(configFile);
 
@@ -139,9 +141,36 @@ namespace KerbalParser
 
 					if (node == null)
 					{
-						throw new Exception(
-							"Parse error: Unexpected property/value outside" +
-							"node at: " + _lineNumber + ", " + _currentLine);
+						if (depth == 0)
+						{
+							var nodeName =
+								Path.GetFileNameWithoutExtension(_configFile);
+
+							if (nodeName != null)
+							{
+								nodeName = nodeName.ToUpper();
+							}
+
+							if (ValidateNodeName(nodeName))
+							{
+								node = new KerbalNode(nodeName);
+							}
+							else
+							{
+								throw new Exception(
+									"Parse error: Invalid node name \"" +
+									nodeName + "\" at, " + _lineNumber + ": " +
+									_currentLine
+									);
+							}
+						}
+						else
+						{
+							throw new Exception(
+								"Parse error: Unexpected property/value" +
+								"outside node at: " + _lineNumber + ", " +
+								_currentLine);
+						}
 					}
 
 					AddItems(property, value, node.Values);
