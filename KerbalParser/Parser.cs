@@ -15,12 +15,14 @@ namespace KerbalParser
 		private int _lineNumber;
 		private string _currentLine;
 		private string _configFile;
+		private int _skipDepth;
 
 		public KerbalConfig ParseConfig(String configFile)
 		{
 			_lineNumber = 0;
 			_currentLine = null;
 			_configFile = configFile;
+			_skipDepth = -1;
 
 			var kerbalConfig = new KerbalConfig(configFile);
 
@@ -56,8 +58,6 @@ namespace KerbalParser
 
 		public KerbalNode ParseTree(StreamReader sr)
 		{
-			KerbalNode node;
-
 			var headNodeName =
 				Path.GetFileNameWithoutExtension(_configFile);
 
@@ -66,18 +66,8 @@ namespace KerbalParser
 				headNodeName = headNodeName.ToUpper();
 			}
 
-			if (ValidateNodeName(headNodeName))
-			{
-				node = new KerbalNode(headNodeName);
-			}
-			else
-			{
-				throw new ParseErrorException(
-					"Parse error: Invalid node name \"" +
-					headNodeName + "\" at, " + _lineNumber + ": " +
-					_currentLine
-					);
-			}
+			// Don't validate head node since a file name can be anything
+			var node = new KerbalNode(headNodeName);
 
 			string line;
 			string previousLine = null;
@@ -95,7 +85,13 @@ namespace KerbalParser
 					continue;
 				}
 
-				if (line.Trim().Contains("{"))
+				if (_skipDepth > -1 && _skipDepth < depth &&
+				    line.Trim().Contains("{"))
+				{
+					depth++;
+				}
+
+				if (line.Trim().Contains("{") && _skipDepth < 0)
 				{
 					var tokens = line.Trim().Split('{');
 
@@ -116,27 +112,36 @@ namespace KerbalParser
 						}
 					}
 
-					if (!ValidateNodeName(nodeName))
+					if (IsModuleManagerNode(nodeName))
 					{
-						throw new ParseErrorException(
-							"Parse error: Invalid node name \"" + nodeName +
-							"\" at, " + _lineNumber + ": " + _currentLine
-							);
+						_skipDepth = depth;
+						depth++;
 					}
-
-					if (tokens.Length > 1)
+					else
 					{
-						line = tokens[1];
+						if (!ValidateNodeName(nodeName))
+						{
+							throw new ParseErrorException(
+								"Parse error: Invalid node name \"" +
+								nodeName + "\" at, " + _lineNumber + ": " +
+								_currentLine
+								);
+						}
+
+						if (tokens.Length > 1)
+						{
+							line = tokens[1];
+						}
+
+						var parentNode = node;
+
+						node = new KerbalNode(nodeName, parentNode);
+
+						depth++;
 					}
-
-					var parentNode = node;
-
-					node = new KerbalNode(nodeName, parentNode);
-
-					depth++;
 				}
 
-				if (line.Trim().Contains("="))
+				if (line.Trim().Contains("=") && _skipDepth < 0)
 				{
 					var tokens = line.Trim().Split('=');
 
@@ -181,7 +186,7 @@ namespace KerbalParser
 					AddItems(property, value, node.Values);
 				}
 
-				if (line.Trim().Contains("}"))
+				if (line.Trim().Contains("}") && _skipDepth < 0)
 				{
 					if (node == null)
 					{
@@ -204,6 +209,16 @@ namespace KerbalParser
 					}
 
 					node = node.Parent;
+				}
+
+				if (_skipDepth > -1 && _skipDepth < depth &&
+				    line.Trim().Contains("}"))
+				{
+					depth--;
+					if (depth == _skipDepth)
+					{
+						_skipDepth = -1;
+					}
 				}
 
 				previousLine = line;
@@ -260,16 +275,7 @@ namespace KerbalParser
 
 			var n = nodeName.Trim();
 
-			if (IsModuleManagerNode(n))
-			{
-				throw new ParseErrorException(
-					"Parse error: Invalid node name (ModuleManager) \"" + n +
-					"\". Are you tring to parse a ModuleManager config? " +
-					"ModuleManager parsing is currently not supported. :" +
-					_lineNumber + ", " + _currentLine);
-			}
-
-			return Regex.IsMatch(n, @"^[A-Z0-9_]+$") || exceptions.Contains(n);
+			return Regex.IsMatch(n, @"^[A-Z_]+$") || exceptions.Contains(n);
 		}
 
 		private static bool IsModuleManagerNode(string nodeName)

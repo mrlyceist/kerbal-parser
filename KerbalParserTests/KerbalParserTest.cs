@@ -162,58 +162,6 @@ namespace KerbalParserTests
 		[Test]
 		[ExpectedException(
 			typeof (ParseErrorException),
-			ExpectedMessage = "Invalid node name (ModuleManager) \"@",
-			MatchType = MessageMatch.Contains,
-			Handler = "HandlerMethod")]
-		public void ModuleManagerOne()
-		{
-			const string file = "..\\..\\testdata\\fail\\mmnode1.cfg";
-			var parser = new Parser();
-			parser.ParseConfig(file);
-		}
-
-		[Test]
-		[ExpectedException(
-			typeof (ParseErrorException),
-			ExpectedMessage = "Invalid node name (ModuleManager) \"+",
-			MatchType = MessageMatch.Contains,
-			Handler = "HandlerMethod")]
-		public void ModuleManagerTwo()
-		{
-			const string file = "..\\..\\testdata\\fail\\mmnode2.cfg";
-			var parser = new Parser();
-			parser.ParseConfig(file);
-		}
-
-		[Test]
-		[ExpectedException(
-			typeof (ParseErrorException),
-			ExpectedMessage = "Invalid node name (ModuleManager) \"%",
-			MatchType = MessageMatch.Contains,
-			Handler = "HandlerMethod")]
-		public void ModuleManagerThree()
-		{
-			const string file = "..\\..\\testdata\\fail\\mmnode3.cfg";
-			var parser = new Parser();
-			parser.ParseConfig(file);
-		}
-
-		[Test]
-		[ExpectedException(
-			typeof (ParseErrorException),
-			ExpectedMessage = "Invalid node name (ModuleManager) \"-",
-			MatchType = MessageMatch.Contains,
-			Handler = "HandlerMethod")]
-		public void ModuleManagerFour()
-		{
-			const string file = "..\\..\\testdata\\fail\\mmnode4.cfg";
-			var parser = new Parser();
-			parser.ParseConfig(file);
-		}
-
-		[Test]
-		[ExpectedException(
-			typeof (ParseErrorException),
 			ExpectedMessage = "Invalid node name \"}",
 			MatchType = MessageMatch.Contains,
 			Handler = "HandlerMethod")]
@@ -385,6 +333,75 @@ namespace KerbalParserTests
 			Assert.AreEqual(2, tree.Children.Count);
 			Assert.AreEqual(3, tree.Children[0].Values.Count);
 			Assert.AreEqual(2, tree.Children[1].Values.Count);
+		}
+
+		[Test]
+		public void ModuleManagerOne()
+		{
+			const string file = "..\\..\\testdata\\fail\\mmnode1.cfg";
+			var parser = new Parser();
+			var kc = parser.ParseConfig(file);
+
+			Assert.AreEqual(1, kc.Count);
+
+			var tree = kc.First();
+
+			Assert.True(tree.Values.ContainsKey("name"));
+			Assert.AreEqual("test", tree.Values["name"].First());
+		}
+
+		[Test]
+		public void ModuleManagerTwo()
+		{
+			const string file = "..\\..\\testdata\\fail\\mmnode2.cfg";
+			var parser = new Parser();
+			var kc = parser.ParseConfig(file);
+
+			Assert.AreEqual(1, kc.Count);
+
+			var tree = kc.First();
+
+			Assert.True(tree.Values.ContainsKey("name"));
+			Assert.AreEqual("test", tree.Values["name"].First());
+		}
+
+		[Test]
+		public void ModuleManagerThree()
+		{
+			const string file = "..\\..\\testdata\\fail\\mmnode3.cfg";
+			var parser = new Parser();
+			var kc = parser.ParseConfig(file);
+
+			Assert.AreEqual(2, kc.Count);
+
+			var tree = kc.First();
+			var treetwo = kc[1];
+
+			Assert.True(tree.Values.ContainsKey("name"));
+			Assert.AreEqual("test", tree.Values["name"].First());
+			Assert.True(treetwo.Values.ContainsKey("name"));
+			Assert.AreEqual("2ndtest", treetwo.Values["name"].First());
+		}
+
+		[Test]
+		public void ModuleManagerFour()
+		{
+			const string file = "..\\..\\testdata\\fail\\mmnode4.cfg";
+			var parser = new Parser();
+			var kc = parser.ParseConfig(file);
+
+			Assert.AreEqual(3, kc.Count);
+
+			var tree = kc.First();
+			var treetwo = kc[1];
+			var treethree = kc[2];
+
+			Assert.True(tree.Values.ContainsKey("name"));
+			Assert.AreEqual("test", tree.Values["name"].First());
+			Assert.True(treetwo.Values.ContainsKey("name"));
+			Assert.AreEqual("2ndtest", treetwo.Values["name"].First());
+			Assert.True(treethree.Values.ContainsKey("name"));
+			Assert.AreEqual("3rdtest", treethree.Values["name"].First());
 		}
 	}
 }
