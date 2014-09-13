@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace KerbalParser
@@ -28,10 +27,20 @@ namespace KerbalParser
 
 			try
 			{
-				KerbalNode kerbalNode;
-				while ((kerbalNode = ParseTree(sr)) != null)
+				var kerbalRoot = ParseTree(sr);
+
+				// Not a headless files - Split children into separate trees
+				if (kerbalRoot.Values.Count == 0)
 				{
-					kerbalConfig.Add(kerbalNode);
+					foreach (var tree in kerbalRoot.Children)
+					{
+						kerbalConfig.Add(tree);
+					}
+				}
+				else
+				{
+					// Headless file
+					kerbalConfig.Add(kerbalRoot);
 				}
 			}
 			catch (Exception e)
@@ -46,11 +55,32 @@ namespace KerbalParser
 
 		public KerbalNode ParseTree(StreamReader sr)
 		{
-			KerbalNode node = null;
+			KerbalNode node;
+
+			var headNodeName =
+				Path.GetFileNameWithoutExtension(_configFile);
+
+			if (headNodeName != null)
+			{
+				headNodeName = headNodeName.ToUpper();
+			}
+
+			if (ValidateNodeName(headNodeName))
+			{
+				node = new KerbalNode(headNodeName);
+			}
+			else
+			{
+				throw new Exception(
+					"Parse error: Invalid node name \"" +
+					headNodeName + "\" at, " + _lineNumber + ": " +
+					_currentLine
+					);
+			}
 
 			string line;
 			string previousLine = null;
-			var depth = 0;
+			var depth = 1;
 
 			while ((line = sr.ReadLine()) != null)
 			{
@@ -141,36 +171,10 @@ namespace KerbalParser
 
 					if (node == null)
 					{
-						if (depth == 0)
-						{
-							var nodeName =
-								Path.GetFileNameWithoutExtension(_configFile);
-
-							if (nodeName != null)
-							{
-								nodeName = nodeName.ToUpper();
-							}
-
-							if (ValidateNodeName(nodeName))
-							{
-								node = new KerbalNode(nodeName);
-							}
-							else
-							{
-								throw new Exception(
-									"Parse error: Invalid node name \"" +
-									nodeName + "\" at, " + _lineNumber + ": " +
-									_currentLine
-									);
-							}
-						}
-						else
-						{
-							throw new Exception(
-								"Parse error: Unexpected property/value" +
-								"outside node at: " + _lineNumber + ", " +
-								_currentLine);
-						}
+						throw new Exception(
+							"Parse error: Unexpected property/value" +
+							"outside node at: " + _lineNumber + ", " +
+							_currentLine);
 					}
 
 					AddItems(property, value, node.Values);
@@ -206,7 +210,7 @@ namespace KerbalParser
 
 			// Parse error on missing matching bracket unless it's the last
 			// bracket of the file, in which case the file is "closed"
-			if (depth > 1)
+			if (depth > 2)
 			{
 				throw new Exception(
 					"Parse Error: Missing matching bracket at: " +

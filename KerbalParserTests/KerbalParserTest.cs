@@ -300,12 +300,35 @@ namespace KerbalParserTests
 			Console.WriteLine(tree);
 
 			Assert.AreEqual("HEADLESS", tree.Name);
-			Assert.AreEqual(5, tree.Values.Count);
+			Assert.AreEqual(7, tree.Values.Count);
 			Assert.IsTrue(tree.Values.ContainsKey("name"));
 			Assert.IsTrue(tree.Values.ContainsKey("module"));
 			Assert.IsTrue(tree.Values.ContainsKey("author"));
 			Assert.IsTrue(tree.Values.ContainsKey("mesh"));
 			Assert.IsTrue(tree.Values.ContainsKey("rescaleFactor"));
+			Assert.IsTrue(tree.Values.ContainsKey("middleprop"));
+			Assert.IsTrue(tree.Values.ContainsKey("lastprop"));
+
+			Assert.AreEqual(2, tree.Children.Count);
+			Assert.AreEqual(3, tree.Children[0].Values.Count);
+			Assert.AreEqual(2, tree.Children[1].Values.Count);
+		}
+
+		[Test]
+		public void HeadLessTrailConfig()
+		{
+			const string file = "..\\..\\testdata\\headlesstrail.cfg";
+			var parser = new Parser();
+			var kc = parser.ParseConfig(file);
+
+			var tree = kc.First();
+
+			Console.WriteLine(tree);
+
+			Assert.AreEqual("HEADLESSTRAIL", tree.Name);
+			Assert.AreEqual(2, tree.Values.Count);
+			Assert.IsTrue(tree.Values.ContainsKey("middleprop"));
+			Assert.IsTrue(tree.Values.ContainsKey("lastprop"));
 
 			Assert.AreEqual(2, tree.Children.Count);
 			Assert.AreEqual(3, tree.Children[0].Values.Count);
