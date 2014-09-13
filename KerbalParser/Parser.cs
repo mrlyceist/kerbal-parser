@@ -162,7 +162,9 @@ namespace KerbalParser
 				previousLine = line;
 			}
 
-			if (depth > 0)
+			// Parse error on missing matching bracket unless it's the last
+			// bracket of the file, in which case the file is "closed"
+			if (depth > 1)
 			{
 				throw new Exception(
 					"Parse Error: Missing matching bracket at: " +
