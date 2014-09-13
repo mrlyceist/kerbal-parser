@@ -339,7 +339,7 @@ namespace KerbalParserTests
 		public void ModuleManagerOne()
 		{
 			const string file = "..\\..\\testdata\\fail\\mmnode1.cfg";
-			var parser = new Parser();
+			var parser = new Parser(true);
 			var kc = parser.ParseConfig(file);
 
 			Assert.AreEqual(1, kc.Count);
@@ -354,7 +354,7 @@ namespace KerbalParserTests
 		public void ModuleManagerTwo()
 		{
 			const string file = "..\\..\\testdata\\fail\\mmnode2.cfg";
-			var parser = new Parser();
+			var parser = new Parser(true);
 			var kc = parser.ParseConfig(file);
 
 			Assert.AreEqual(1, kc.Count);
@@ -369,7 +369,7 @@ namespace KerbalParserTests
 		public void ModuleManagerThree()
 		{
 			const string file = "..\\..\\testdata\\fail\\mmnode3.cfg";
-			var parser = new Parser();
+			var parser = new Parser(true);
 			var kc = parser.ParseConfig(file);
 
 			Assert.AreEqual(2, kc.Count);
@@ -387,7 +387,7 @@ namespace KerbalParserTests
 		public void ModuleManagerFour()
 		{
 			const string file = "..\\..\\testdata\\fail\\mmnode4.cfg";
-			var parser = new Parser();
+			var parser = new Parser(true);
 			var kc = parser.ParseConfig(file);
 
 			Assert.AreEqual(3, kc.Count);

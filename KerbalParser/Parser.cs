@@ -17,10 +17,14 @@ namespace KerbalParser
 		private string _configFile;
 		private int _skipDepth;
 		private readonly bool _validateNodeNames;
+		private readonly bool _ignoreModuleManager;
 
-		public Parser(bool validateNodeNames = false)
+		public Parser(
+			bool validateNodeNames = false,
+			bool ignoreModuleManager = false)
 		{
 			_validateNodeNames = validateNodeNames;
+			_ignoreModuleManager = ignoreModuleManager;
 		}
 
 		public KerbalConfig ParseConfig(String configFile)
@@ -289,8 +293,10 @@ namespace KerbalParser
 			return Regex.IsMatch(n, @"^[A-Z_]+$") || exceptions.Contains(n);
 		}
 
-		private static bool IsModuleManagerNode(string nodeName)
+		private bool IsModuleManagerNode(string nodeName)
 		{
+			if (_ignoreModuleManager) return false;
+
 			var n = nodeName.Trim();
 
 			return Regex.IsMatch(n, @"(^[@%+-])[\S]+");
