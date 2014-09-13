@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace KerbalParserTests
 {
 	[TestFixture]
-	internal class KerbalParserTest
+	internal class BasicTests
 	{
 		private KerbalConfig _kerbalConfig;
 
@@ -172,31 +172,6 @@ namespace KerbalParserTests
 			parser.ParseConfig(file);
 		}
 
-		[Test]
-		public void DuplicateValues()
-		{
-			const string file = "..\\..\\testdata\\fail\\duplicatevalues.cfg";
-			var parser = new Parser();
-			var kc = parser.ParseConfig(file);
-
-			var tree = kc.First();
-
-			Console.WriteLine(tree);
-
-			Assert.AreEqual(4, tree.Values.Count);
-			Assert.IsTrue(tree.Values.ContainsKey("name"));
-			Assert.IsTrue(tree.Values.ContainsKey("module"));
-			Assert.IsTrue(tree.Values.ContainsKey("author"));
-			Assert.IsTrue(tree.Values.ContainsKey("description"));
-			Assert.AreEqual(3, tree.Values["name"].Count);
-			Assert.AreEqual(2, tree.Values["author"].Count);
-			Assert.IsTrue(tree.Values["name"].First() == "batteryBankMini");
-			Assert.IsTrue(tree.Values["name"][1] == "batteryBankMini2");
-			Assert.IsTrue(tree.Values["name"][2] == "spice");
-			Assert.IsTrue(tree.Values["author"].First() == "Squad");
-			Assert.IsTrue(tree.Values["author"][1] == "Bob");
-		}
-
 		public void HandlerMethod(Exception e)
 		{
 			Console.WriteLine(e.Message);
@@ -204,7 +179,7 @@ namespace KerbalParserTests
 	}
 
 	[TestFixture]
-	public class ComplexParse
+	public class ComplexFileTests
 	{
 		private KerbalConfig _kerbalConfig;
 
@@ -282,6 +257,35 @@ namespace KerbalParserTests
 
 			Assert.IsTrue(node.Values.ContainsKey("author"));
 			Assert.IsTrue(node.Values["author"].First() == "");
+		}
+	}
+
+	[TestFixture]
+	public class AdvancedParseTests
+	{
+		[Test]
+		public void DuplicateValues()
+		{
+			const string file = "..\\..\\testdata\\fail\\duplicatevalues.cfg";
+			var parser = new Parser();
+			var kc = parser.ParseConfig(file);
+
+			var tree = kc.First();
+
+			Console.WriteLine(tree);
+
+			Assert.AreEqual(4, tree.Values.Count);
+			Assert.IsTrue(tree.Values.ContainsKey("name"));
+			Assert.IsTrue(tree.Values.ContainsKey("module"));
+			Assert.IsTrue(tree.Values.ContainsKey("author"));
+			Assert.IsTrue(tree.Values.ContainsKey("description"));
+			Assert.AreEqual(3, tree.Values["name"].Count);
+			Assert.AreEqual(2, tree.Values["author"].Count);
+			Assert.IsTrue(tree.Values["name"].First() == "batteryBankMini");
+			Assert.IsTrue(tree.Values["name"][1] == "batteryBankMini2");
+			Assert.IsTrue(tree.Values["name"][2] == "spice");
+			Assert.IsTrue(tree.Values["author"].First() == "Squad");
+			Assert.IsTrue(tree.Values["author"][1] == "Bob");
 		}
 	}
 }
