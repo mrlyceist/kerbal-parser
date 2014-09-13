@@ -149,7 +149,7 @@ namespace KerbalParserTests
 		[Test]
 		[ExpectedException(
 			typeof (Exception),
-			ExpectedMessage = "Invalid node name",
+			ExpectedMessage = "Invalid node name \"Part\"",
 			MatchType = MessageMatch.Contains,
 			Handler = "HandlerMethod")]
 		public void InvalidNodeName()
@@ -162,7 +162,7 @@ namespace KerbalParserTests
 		[Test]
 		[ExpectedException(
 			typeof (Exception),
-			ExpectedMessage = "Invalid node name",
+			ExpectedMessage = "Invalid node name \"}",
 			MatchType = MessageMatch.Contains,
 			Handler = "HandlerMethod")]
 		public void DuplicateBrackets()

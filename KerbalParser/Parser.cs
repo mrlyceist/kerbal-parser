@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace KerbalParser
@@ -222,7 +223,44 @@ namespace KerbalParser
 
 		private static bool ValidateNodeName(string nodeName)
 		{
-			return Regex.IsMatch(nodeName.Trim(), @"^[a-zA-Z_]+$");
+			string[] exceptions =
+			{
+				"running_closed",
+				"running_open",
+				"engage",
+				"flameout",
+				"atmosphereCurve",
+				"powerCurve",
+				"velocityCurve",
+				"steeringCurve",
+				"torqueCurve",
+				"Thrust",
+				"power_open",
+				"power_closed",
+				"indicators",
+				"indicator",
+				"increments",
+				"ContractBackstory",
+				"LeadIns",
+				"Situations",
+				"Excuses",
+				"Circumstances",
+				"Characters",
+				"CharacterAttributes",
+				"Predicates",
+				"ObjectPredicates",
+				"FactLeadIns",
+				"Facts",
+				"BriefingConclusions",
+				"Bridges",
+				"Adjectives",
+				"Adverbs",
+				"Adjunctives"
+			};
+
+			var n = nodeName.Trim();
+
+			return Regex.IsMatch(n, @"^[A-Z_]+$") || exceptions.Contains(n);
 		}
 
 		private static void AddItems(
