@@ -81,6 +81,10 @@
     <None Include="testdata\complex.cfg" />
     <None Include="testdata\fail\duplicatebrackets.cfg" />
     <None Include="testdata\fail\duplicatevalues.cfg" />
+    <None Include="testdata\fail\mmnode3.cfg" />
+    <None Include="testdata\fail\mmnode4.cfg" />
+    <None Include="testdata\fail\mmnode2.cfg" />
+    <None Include="testdata\fail\mmnode1.cfg" />
     <None Include="testdata\fail\invalidnodename.cfg" />
     <None Include="testdata\fail\mismatch.cfg" />
     <None Include="testdata\headlesstrail.cfg" />

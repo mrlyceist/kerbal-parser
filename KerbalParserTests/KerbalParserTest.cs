@@ -162,6 +162,58 @@ namespace KerbalParserTests
 		[Test]
 		[ExpectedException(
 			typeof (ParseErrorException),
+			ExpectedMessage = "Invalid node name (ModuleManager) \"@",
+			MatchType = MessageMatch.Contains,
+			Handler = "HandlerMethod")]
+		public void ModuleManagerOne()
+		{
+			const string file = "..\\..\\testdata\\fail\\mmnode1.cfg";
+			var parser = new Parser();
+			parser.ParseConfig(file);
+		}
+
+		[Test]
+		[ExpectedException(
+			typeof (ParseErrorException),
+			ExpectedMessage = "Invalid node name (ModuleManager) \"+",
+			MatchType = MessageMatch.Contains,
+			Handler = "HandlerMethod")]
+		public void ModuleManagerTwo()
+		{
+			const string file = "..\\..\\testdata\\fail\\mmnode2.cfg";
+			var parser = new Parser();
+			parser.ParseConfig(file);
+		}
+
+		[Test]
+		[ExpectedException(
+			typeof (ParseErrorException),
+			ExpectedMessage = "Invalid node name (ModuleManager) \"%",
+			MatchType = MessageMatch.Contains,
+			Handler = "HandlerMethod")]
+		public void ModuleManagerThree()
+		{
+			const string file = "..\\..\\testdata\\fail\\mmnode3.cfg";
+			var parser = new Parser();
+			parser.ParseConfig(file);
+		}
+
+		[Test]
+		[ExpectedException(
+			typeof (ParseErrorException),
+			ExpectedMessage = "Invalid node name (ModuleManager) \"-",
+			MatchType = MessageMatch.Contains,
+			Handler = "HandlerMethod")]
+		public void ModuleManagerFour()
+		{
+			const string file = "..\\..\\testdata\\fail\\mmnode4.cfg";
+			var parser = new Parser();
+			parser.ParseConfig(file);
+		}
+
+		[Test]
+		[ExpectedException(
+			typeof (ParseErrorException),
 			ExpectedMessage = "Invalid node name \"}",
 			MatchType = MessageMatch.Contains,
 			Handler = "HandlerMethod")]

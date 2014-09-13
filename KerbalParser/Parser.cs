@@ -221,7 +221,7 @@ namespace KerbalParser
 			return node;
 		}
 
-		private static bool ValidateNodeName(string nodeName)
+		private bool ValidateNodeName(string nodeName)
 		{
 			string[] exceptions =
 			{
@@ -260,7 +260,23 @@ namespace KerbalParser
 
 			var n = nodeName.Trim();
 
-			return Regex.IsMatch(n, @"^[A-Z_]+$") || exceptions.Contains(n);
+			if (IsModuleManagerNode(n))
+			{
+				throw new ParseErrorException(
+					"Parse error: Invalid node name (ModuleManager) \"" + n +
+					"\". Are you tring to parse a ModuleManager config? " +
+					"ModuleManager parsing is currently not supported. :" +
+					_lineNumber + ", " + _currentLine);
+			}
+
+			return Regex.IsMatch(n, @"^[A-Z0-9_]+$") || exceptions.Contains(n);
+		}
+
+		private static bool IsModuleManagerNode(string nodeName)
+		{
+			var n = nodeName.Trim();
+
+			return Regex.IsMatch(n, @"(^[@%+-])[\S]+");
 		}
 
 		private static void AddItems(
