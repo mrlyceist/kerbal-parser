@@ -49,6 +49,7 @@
     <Compile Include="JsonSerializer.cs" />
     <Compile Include="KerbalConfig.cs" />
     <Compile Include="KerbalNode.cs" />
+    <Compile Include="ParseErrorException.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

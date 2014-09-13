@@ -135,7 +135,7 @@ namespace KerbalParserTests
 	{
 		[Test]
 		[ExpectedException(
-			typeof (Exception),
+			typeof (ParseErrorException),
 			ExpectedMessage = "matching bracket",
 			MatchType = MessageMatch.Contains,
 			Handler = "HandlerMethod")]
@@ -148,7 +148,7 @@ namespace KerbalParserTests
 
 		[Test]
 		[ExpectedException(
-			typeof (Exception),
+			typeof (ParseErrorException),
 			ExpectedMessage = "Invalid node name \"Part\"",
 			MatchType = MessageMatch.Contains,
 			Handler = "HandlerMethod")]
@@ -161,7 +161,7 @@ namespace KerbalParserTests
 
 		[Test]
 		[ExpectedException(
-			typeof (Exception),
+			typeof (ParseErrorException),
 			ExpectedMessage = "Invalid node name \"}",
 			MatchType = MessageMatch.Contains,
 			Handler = "HandlerMethod")]

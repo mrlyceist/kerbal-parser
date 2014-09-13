@@ -44,9 +44,9 @@ namespace KerbalParser
 					kerbalConfig.Add(kerbalRoot);
 				}
 			}
-			catch (Exception e)
+			catch (ParseErrorException e)
 			{
-				throw new Exception(
+				throw new ParseErrorException(
 					e.Message + "\nFile: " +
 					kerbalConfig.FileName);
 			}
@@ -72,7 +72,7 @@ namespace KerbalParser
 			}
 			else
 			{
-				throw new Exception(
+				throw new ParseErrorException(
 					"Parse error: Invalid node name \"" +
 					headNodeName + "\" at, " + _lineNumber + ": " +
 					_currentLine
@@ -109,7 +109,7 @@ namespace KerbalParser
 						}
 						else
 						{
-							throw new Exception(
+							throw new ParseErrorException(
 								"Parse error: Unexpected '{' at: " +
 								_lineNumber + " " + _currentLine
 								);
@@ -118,7 +118,7 @@ namespace KerbalParser
 
 					if (!ValidateNodeName(nodeName))
 					{
-						throw new Exception(
+						throw new ParseErrorException(
 							"Parse error: Invalid node name \"" + nodeName +
 							"\" at, " + _lineNumber + ": " + _currentLine
 							);
@@ -142,7 +142,7 @@ namespace KerbalParser
 
 					if (tokens.Length < 2)
 					{
-						throw new Exception(
+						throw new ParseErrorException(
 							"Parse error: Unexpected '=' sign at: " +
 							_lineNumber + ", " + _currentLine);
 					}
@@ -153,7 +153,7 @@ namespace KerbalParser
 						tokens[1] = subtokens[0];
 						if (subtokens.Length > 2)
 						{
-							throw new Exception(
+							throw new ParseErrorException(
 								"Parse error: Unexpected '}' sign at: " +
 								_lineNumber + ", " + _currentLine);
 						}
@@ -165,14 +165,14 @@ namespace KerbalParser
 
 					if (String.IsNullOrEmpty(property))
 					{
-						throw new Exception(
+						throw new ParseErrorException(
 							"Parse error: Unexpected '=' sign at: " +
 							_lineNumber + ", " + _currentLine);
 					}
 
 					if (node == null)
 					{
-						throw new Exception(
+						throw new ParseErrorException(
 							"Parse error: Unexpected property/value" +
 							"outside node at: " + _lineNumber + ", " +
 							_currentLine);
@@ -185,7 +185,7 @@ namespace KerbalParser
 				{
 					if (node == null)
 					{
-						throw new Exception(
+						throw new ParseErrorException(
 							"Parse error: Unexpected '}' sign at:" +
 							_lineNumber + ", " + _currentLine);
 					}
@@ -213,7 +213,7 @@ namespace KerbalParser
 			// bracket of the file, in which case the file is "closed"
 			if (depth > 2)
 			{
-				throw new Exception(
+				throw new ParseErrorException(
 					"Parse Error: Missing matching bracket at: " +
 					_lineNumber);
 			}
