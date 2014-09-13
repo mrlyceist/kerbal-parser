@@ -25,7 +25,7 @@ namespace KerbalParserTests
 			var dir = new DirectoryInfo(BaseDir);
 
 			_configs = new List<KerbalConfig>();
-			var parser = new Parser();
+			var parser = new Parser(false,true);
 
 			foreach (var file in
 				dir.GetFiles("*.cfg", SearchOption.AllDirectories))
@@ -55,15 +55,6 @@ namespace KerbalParserTests
 				                  " Trees");
 
 				Assert.Greater(config.Count, 0, config.FileName);
-				foreach (var tree in config)
-				{
-					// Check if it has either values or children (not empty)
-					Assert.Greater(
-					               tree.Values.Count + tree.Children.Count,
-					               0,
-					               config.FileName +
-					               " :: " + tree.Name);
-				}
 			}
 		}
 
