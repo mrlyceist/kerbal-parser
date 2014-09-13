@@ -218,17 +218,7 @@ namespace KerbalParser
 
 		private static bool ValidateNodeName(string nodeName)
 		{
-			string[] exceptions =
-			{
-				"running_closed",
-				"engage",
-				"flameout",
-				"atmosphereCurve"
-			};
-
-			var n = nodeName.Trim();
-
-			return Regex.IsMatch(n, @"^[a-zA-Z_]+$") || exceptions.Contains(n);
+			return Regex.IsMatch(nodeName.Trim(), @"^[a-zA-Z_]+$");
 		}
 
 		private static void AddItems(
