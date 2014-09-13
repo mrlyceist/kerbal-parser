@@ -111,6 +111,15 @@ namespace KerbalParser
 					{
 						if (previousLine != null)
 						{
+							if (previousLine.Contains("//"))
+							{
+								var index = previousLine.
+									IndexOf(
+									        "//",
+									        StringComparison.Ordinal);
+								previousLine = previousLine.
+									Substring(0, index);
+							}
 							nodeName = previousLine.Trim();
 						}
 						else
