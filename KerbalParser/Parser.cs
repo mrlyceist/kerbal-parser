@@ -16,6 +16,12 @@ namespace KerbalParser
 		private string _currentLine;
 		private string _configFile;
 		private int _skipDepth;
+		private readonly bool _validateNodeNames;
+
+		public Parser(bool validateNodeNames = false)
+		{
+			_validateNodeNames = validateNodeNames;
+		}
 
 		public KerbalConfig ParseConfig(String configFile)
 		{
@@ -238,6 +244,13 @@ namespace KerbalParser
 
 		private bool ValidateNodeName(string nodeName)
 		{
+			var n = nodeName.Trim();
+
+			if (!_validateNodeNames)
+			{
+				return Regex.IsMatch(n, @"^[^{\s]+$");
+			}
+
 			string[] exceptions =
 			{
 				"running_closed",
@@ -272,8 +285,6 @@ namespace KerbalParser
 				"Adverbs",
 				"Adjunctives"
 			};
-
-			var n = nodeName.Trim();
 
 			return Regex.IsMatch(n, @"^[A-Z_]+$") || exceptions.Contains(n);
 		}

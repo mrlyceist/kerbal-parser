@@ -155,7 +155,7 @@ namespace KerbalParserTests
 		public void InvalidNodeName()
 		{
 			const string file = "..\\..\\testdata\\fail\\invalidnodename.cfg";
-			var parser = new Parser();
+			var parser = new Parser(true);
 			parser.ParseConfig(file);
 		}
 
