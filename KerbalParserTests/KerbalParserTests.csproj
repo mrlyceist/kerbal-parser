@@ -87,9 +87,11 @@
     <None Include="testdata\fail\mmnode1.cfg" />
     <None Include="testdata\fail\invalidnodename.cfg" />
     <None Include="testdata\fail\mismatch.cfg" />
+    <None Include="testdata\headlessfilter.cfg" />
     <None Include="testdata\headlesstrail.cfg" />
     <None Include="testdata\multi.cfg" />
     <None Include="testdata\headless.cfg" />
+    <None Include="testdata\filter.cfg" />
     <None Include="testdata\simple.cfg" />
     <None Include="testdata\techtree.cfg" />
   </ItemGroup>

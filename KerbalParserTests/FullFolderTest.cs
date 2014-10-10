@@ -15,7 +15,7 @@ namespace KerbalParserTests
 
 		private const string BaseDir =
 			"C:\\Program Files (x86)\\Steam\\SteamApps\\common\\" +
-			"Kerbal Space Program 0.24.2 Stock\\GameData";
+			"Kerbal Space Program\\GameData";
 
 		[SetUp]
 		public void Init()

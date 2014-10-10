@@ -403,5 +403,52 @@ namespace KerbalParserTests
 			Assert.True(treethree.Values.ContainsKey("name"));
 			Assert.AreEqual("3rdtest", treethree.Values["name"].First());
 		}
+
+		[Test]
+		public void FilterTest()
+		{
+			const string file = "..\\..\\testdata\\filter.cfg";
+			var filters = new List<string> { "PART", "ANOTHER" };
+			var parser = new Parser(filters, false, true);
+			var kc = parser.ParseConfig(file);
+
+
+			Assert.AreEqual(2, kc.Count);
+
+			var part = kc.First();
+			Console.WriteLine(part);
+			var another = kc[1];
+			Console.WriteLine(another);
+
+			Assert.True(part.Values.ContainsKey("name"));
+			Assert.AreEqual("partname", part.Values["name"].First());
+			Assert.AreEqual(1, part.Children.Count);
+			Assert.True(another.Values.ContainsKey("name"));
+			Assert.AreEqual("foo", another.Values["name"].First());
+		}
+
+		[Test]
+		public void HeadlessFilterTest()
+		{
+			const string file = "..\\..\\testdata\\headlessfilter.cfg";
+			var filters = new List<string> { "OTHER" };
+			var parser = new Parser(filters, false, true);
+			var kc = parser.ParseConfig(file);
+
+			Assert.IsEmpty(kc);
+
+			var filters2 = new List<string> { "HEADLESSFILTER" };
+			var parser2 = new Parser(filters2, false, true);
+			var kc2 = parser2.ParseConfig(file);
+
+			Assert.AreEqual(1, kc2.Count);
+
+			var part = kc2.First();
+			Console.WriteLine(part);
+
+			Assert.True(part.Values.ContainsKey("name"));
+			Assert.AreEqual("external", part.Values["name"].First());
+			Assert.AreEqual(1, part.Children.Count);
+		}
 	}
 }

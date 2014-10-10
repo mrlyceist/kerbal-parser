@@ -18,13 +18,68 @@ namespace KerbalParser
 		private int _skipDepth;
 		private readonly bool _validateNodeNames;
 		private readonly bool _ignoreModuleManager;
+		private readonly IList<string> _filters;
 
+		/// <summary>
+		/// Create a parser instance.
+		/// </summary>
+		/// <param name="validateNodeNames" default="false">
+		/// If true will throw a parse error if the node names are not all-caps
+		/// or contain special characters, which is the way KSP parses the
+		/// nodes. However, this is not recommended by default if parsing mods,
+		/// since many mods have their own convention for node names.
+		///
+		/// If false, the node name will be kept as is.
+		/// </param>
+		/// <param name="ignoreModuleManager" default="false">
+		/// If true will skip ModuleManager nodes completely and they will not
+		/// be parsed.
+		///
+		/// If false will parse ModuleManager nodes as if they were normal
+		/// nodes. Keep in mind that if you have this set to true together with
+		/// <see cref="validateNodeNames"/>, ModuleManager nodes will
+		/// inevitably throw parse errors.
+		/// </param>
 		public Parser(
 			bool validateNodeNames = false,
 			bool ignoreModuleManager = false)
 		{
 			_validateNodeNames = validateNodeNames;
 			_ignoreModuleManager = ignoreModuleManager;
+		}
+
+		/// <summary>
+		/// Create a parser instance.
+		/// </summary>
+		/// <param name="filter">
+		/// Supply a list of top level node names you want to parse. All others
+		/// will be ignored. Node names must be exact and are Case Sensitive.
+		/// </param>
+		/// <param name="validateNodeNames" default="false">
+		/// If true will throw a parse error if the node names are not all-caps
+		/// or contain special characters, which is the way KSP parses the
+		/// nodes. However, this is not recommended by default if parsing mods,
+		/// since many mods have their own convention for node names.
+		///
+		/// If false, the node name will be kept as is.
+		/// </param>
+		/// <param name="ignoreModuleManager" default="false">
+		/// If true will skip ModuleManager nodes completely and they will not
+		/// be parsed.
+		///
+		/// If false will parse ModuleManager nodes as if they were normal
+		/// nodes. Keep in mind that if you have this set to true together with
+		/// <see cref="validateNodeNames"/>, ModuleManager nodes will
+		/// inevitably throw parse errors.
+		/// </param>
+		public Parser(
+			IList<string> filter,
+			bool validateNodeNames = false,
+			bool ignoreModuleManager = false)
+		{
+			_validateNodeNames = validateNodeNames;
+			_ignoreModuleManager = ignoreModuleManager;
+			_filters = filter;
 		}
 
 		public KerbalConfig ParseConfig(String configFile)
@@ -42,7 +97,7 @@ namespace KerbalParser
 			{
 				var kerbalRoot = ParseTree(sr);
 
-				// Not a headless files - Split children into separate trees
+				// Not a headless file - Split children into separate trees
 				if (kerbalRoot.Values.Count == 0)
 				{
 					foreach (var tree in kerbalRoot.Children)
@@ -50,9 +105,10 @@ namespace KerbalParser
 						kerbalConfig.Add(tree);
 					}
 				}
-				else
+				else if (_filters == null ||
+				         _filters.Contains(kerbalRoot.Name))
 				{
-					// Headless file
+					// Headless file (unless filtered out)
 					kerbalConfig.Add(kerbalRoot);
 				}
 			}
@@ -131,7 +187,9 @@ namespace KerbalParser
 						}
 					}
 
-					if (IsModuleManagerNode(nodeName))
+					if (IsModuleManagerNode(nodeName) ||
+					    (_filters != null && depth == 1
+					     && !_filters.Contains(nodeName)))
 					{
 						_skipDepth = depth;
 						depth++;
