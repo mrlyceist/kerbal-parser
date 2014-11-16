@@ -146,32 +146,6 @@ namespace KerbalParserTests
 			parser.ParseConfig(file);
 		}
 
-		[Test]
-		[ExpectedException(
-			typeof (ParseErrorException),
-			ExpectedMessage = "Invalid node name \"Part\"",
-			MatchType = MessageMatch.Contains,
-			Handler = "HandlerMethod")]
-		public void InvalidNodeName()
-		{
-			const string file = "..\\..\\testdata\\fail\\invalidnodename.cfg";
-			var parser = new Parser(true);
-			parser.ParseConfig(file);
-		}
-
-		[Test]
-		[ExpectedException(
-			typeof (ParseErrorException),
-			ExpectedMessage = "Invalid node name \"}",
-			MatchType = MessageMatch.Contains,
-			Handler = "HandlerMethod")]
-		public void DuplicateBrackets()
-		{
-			const string file = "..\\..\\testdata\\fail\\duplicatebrackets.cfg";
-			var parser = new Parser();
-			parser.ParseConfig(file);
-		}
-
 		public void HandlerMethod(Exception e)
 		{
 			Console.WriteLine(e.Message);
@@ -449,6 +423,69 @@ namespace KerbalParserTests
 			Assert.True(part.Values.ContainsKey("name"));
 			Assert.AreEqual("external", part.Values["name"].First());
 			Assert.AreEqual(1, part.Children.Count);
+		}
+
+		[Test]
+		public void SkipBrokenNodesWithValidation()
+		{
+			const string file = "..\\..\\testdata\\fail\\invalidnodename.cfg";
+			var parser = new Parser(true);
+			var kc = parser.ParseConfig(file);
+
+			Assert.AreEqual(1, kc.Count);
+
+			var part = kc.First();
+			Console.WriteLine(part);
+
+			Assert.True(part.Values.ContainsKey("name"));
+			Assert.AreEqual(24, part.Values.Count);
+			Assert.AreEqual(0, part.Children.Count);
+		}
+
+		[Test]
+		public void SkipBrokenNodesWithoutValidation()
+		{
+			const string file = "..\\..\\testdata\\fail\\invalidnodename.cfg";
+			var parser = new Parser();
+			var kc = parser.ParseConfig(file);
+
+			Assert.AreEqual(1, kc.Count);
+
+			var part = kc.First();
+			Console.WriteLine(part);
+
+			Assert.True(part.Values.ContainsKey("name"));
+			Assert.AreEqual(24, part.Values.Count);
+			Assert.AreEqual(1, part.Children.Count);
+		}
+
+		[Test]
+		public void DuplicateBracketsSkipsNode()
+		{
+			const string file = "..\\..\\testdata\\fail\\duplicatebrackets.cfg";
+			var parser = new Parser();
+			var kc = parser.ParseConfig(file);
+
+			Assert.AreEqual(1, kc.Count);
+
+			var part = kc.First();
+			Console.WriteLine(part);
+
+			Assert.True(part.Values.ContainsKey("name"));
+			Assert.AreEqual(3, part.Values.Count);
+			Assert.AreEqual(2, part.Children.Count);
+
+			var child1 = part.Children[0];
+			var child2 = part.Children[1];
+
+			Assert.AreEqual("RESOURCE", child1.Name);
+			Assert.True(child1.Values.ContainsKey("name"));
+			Assert.True(child1.Values.ContainsKey("amount"));
+			Assert.AreEqual(3, child1.Values.Count);
+
+			Assert.AreEqual("MODULE", child2.Name);
+			Assert.True(child2.Values.ContainsKey("name"));
+			Assert.AreEqual(2, child2.Values.Count);
 		}
 	}
 }

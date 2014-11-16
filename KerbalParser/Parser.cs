@@ -194,17 +194,13 @@ namespace KerbalParser
 						_skipDepth = depth;
 						depth++;
 					}
+					else if (!ValidateNodeName(nodeName))
+					{
+						_skipDepth = depth;
+						depth++;
+					}
 					else
 					{
-						if (!ValidateNodeName(nodeName))
-						{
-							throw new ParseErrorException(
-								"Parse error: Invalid node name \"" +
-								nodeName + "\" at, " + _lineNumber + ": " +
-								_currentLine
-								);
-						}
-
 						if (tokens.Length > 1)
 						{
 							line = tokens[1];
