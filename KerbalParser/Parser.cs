@@ -256,7 +256,12 @@ namespace KerbalParser
                             _currentLine);
                     }
 
-                    AddItems(property, value, node.Values);
+                    //AddItems(property, value, node.Values);
+
+                    if (value.Contains(@"//"))
+                        value = value.Split(new[] {@"//"}, StringSplitOptions.None)[0].Trim();
+
+                    node.Values[property] = value;
                 }
 
                 if (line.Trim().Contains("}") && _skipDepth < 0)
@@ -307,16 +312,6 @@ namespace KerbalParser
             }
 
             return node;
-        }
-
-        private void AddItems(string key, string value, IDictionary<string, string> dictionary)
-        {
-            //if (dictionary.ContainsKey(key) && dictionary[key] != null)
-                dictionary[key] = value;
-            //else
-            //{
-            //    var 
-            //}
         }
 
         private bool ValidateNodeName(string nodeName)

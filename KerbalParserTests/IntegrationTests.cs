@@ -58,8 +58,10 @@ namespace KerbalParserTests
         {
             var properties = _cfg.First().Values;
             var tech = properties["TechRequired"];
+            var cost = properties["cost"];
 
-            Assert.AreEqual(tech, "commandModules", $"Part tech is {tech}");
+            Assert.AreEqual("commandModules", tech, $"Part tech is {tech}");
+            Assert.AreEqual("4400", cost, $"Part cost is {cost}");
         }
     }
 }
