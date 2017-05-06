@@ -1,7 +1,6 @@
-using System;
-using System.Linq;
 using KerbalParser;
 using NUnit.Framework;
+using System;
 
 namespace KerbalParserTests
 {
@@ -83,7 +82,8 @@ namespace KerbalParserTests
             var node = _kerbalConfig.First();
 
             Assert.IsTrue(node.Values.ContainsKey("author"));
-            Assert.IsTrue(node.Values["author"].First() == "");
+            Assert.IsTrue(node.Values["author"] == "");
+            //Assert.IsTrue(node.Values["author"].First() == "");
         }
     }
 }

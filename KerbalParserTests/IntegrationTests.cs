@@ -21,6 +21,14 @@ namespace KerbalParserTests
             _cfg = _parser.ParseConfig(_testPart);
         }
 
+        [TestCleanup]
+        public void TearDown()
+        {
+            _testPart = null;
+            _parser = null;
+            _cfg = null;
+        }
+
         [TestMethod]
         public void CapsuleTest()
         {
@@ -40,9 +48,18 @@ namespace KerbalParserTests
         [TestMethod]
         public void CapsuleHas34Properties()
         {
-            var properties = _cfg.Count;
+            var properties = _cfg.Nodes[0].Values.Count;
 
-            //Assert.AreEqual(34, properties, $"Expected 34 porperties but got {properties}");
+            Assert.AreEqual(34, properties, $"Expected 34 porperties but got {properties}");
+        }
+
+        [TestMethod]
+        public void CapsulePropertiesAreParsedCorrectly()
+        {
+            var properties = _cfg.First().Values;
+            var tech = properties["TechRequired"];
+
+            Assert.AreEqual(tech, "commandModules", $"Part tech is {tech}");
         }
     }
 }

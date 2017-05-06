@@ -41,8 +41,9 @@ namespace KerbalParserTests
 
                 Assert.IsNotNullOrEmpty
                     (kerbalNode.Name);
-                Assert.IsInstanceOf<IDictionary<string, List<string>>>
-                    (kerbalNode.Values);
+                //Assert.IsInstanceOf<IDictionary<string, List<string>>>
+                //    (kerbalNode.Values);
+                Assert.IsInstanceOf<IDictionary<string, string>>(kerbalNode.Values);
                 Assert.IsInstanceOf<IList<KerbalNode>>
                     (kerbalNode.Children);
             }

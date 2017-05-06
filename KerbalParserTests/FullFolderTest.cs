@@ -12,9 +12,8 @@ namespace KerbalParserTests
         private List<KerbalConfig> _configs;
         private int _fileCount;
 
-        private const string BaseDir = "d:\\else\\Kerbal Space Program\\GameData";
-        //"C:\\Program Files (x86)\\Steam\\SteamApps\\common\\" +
-        //"Kerbal Space Program\\GameData";
+        //private const string BaseDir = "d:\\else\\Kerbal Space Program\\GameData";
+        private const string BaseDir = "d:\\Games\\SteamLibrary\\steamapps\\common\\Kerbal Space Program\\GameData";
 
         [SetUp]
         public void Init()
