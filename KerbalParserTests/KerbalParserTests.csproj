@@ -72,13 +72,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AdvancedParseTests.cs" />
+    <Compile Include="ComplexFileTests.cs" />
+    <Compile Include="FailureTests.cs" />
     <Compile Include="FullFolderTest.cs" />
     <Compile Include="IntegrationTests.cs" />
-    <Compile Include="KerbalParserTest.cs" />
+    <Compile Include="BasicTests.cs" />
+    <Compile Include="MultiTreeParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="testdata\capsule.cfg" />
     <None Include="testdata\complex.cfg" />
     <None Include="testdata\fail\duplicatebrackets.cfg" />
     <None Include="testdata\fail\duplicatevalues.cfg" />
