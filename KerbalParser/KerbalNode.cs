@@ -10,8 +10,8 @@ namespace KerbalParser
         {
             Name = name;
             Parent = parent;
-            Values = new Dictionary<string, string>();
-            //Values = new Dictionary<string, List<string>>();
+            Values = new PropertyDictionary<string, string>();
+            //Values = new Dictionary<string, string>();
             Children = new List<KerbalNode>();
 
             Parent?.Children.Add(this);
@@ -23,8 +23,8 @@ namespace KerbalParser
         public KerbalNode Parent { get; set; }
 
         [DataMember(Order = 3)]
-        public IDictionary<string, string> Values { get; set; }
-        //public IDictionary<string, List<string>> Values { get; set; }
+        public PropertyDictionary<string, string> Values { get; set; }
+        //public IDictionary<string, string> Values { get; set; }
 
         [DataMember(Order = 4)]
         public IList<KerbalNode> Children { get; set; }
