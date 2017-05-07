@@ -10,8 +10,8 @@ namespace KerbalParser
         {
             Name = name;
             Parent = parent;
-            Values = new Dictionary<string, string>();
-            //Values = new Dictionary<string, List<string>>();
+            Values = new PropertyDictionary<string, string>();
+            //Values = new Dictionary<string, string>();
             Children = new List<KerbalNode>();
 
             Parent?.Children.Add(this);
