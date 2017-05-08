@@ -1,4 +1,5 @@
-﻿using KerbalParser;
+﻿using System;
+using KerbalParser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +63,30 @@ namespace KerbalParserTests
 
             Assert.AreEqual("commandModules", tech, $"Part tech is {tech}");
             Assert.AreEqual("4400", cost, $"Part cost is {cost}");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ParseErrorException))]
+        public void WrongPropertiesThrowParseException()
+        {
+            var properties = _cfg.First().Values;
+            var none = properties["none"];
+        }
+
+        [TestMethod]
+        public void ExceptionReturnsWrongKey()
+        {
+            string message = string.Empty;
+            var properties = _cfg.First().Values;
+            try
+            {
+                var none = properties["none"];
+            }
+            catch (ParseErrorException ex)
+            {
+                message = ex.Message;
+            }
+            StringAssert.Contains(message, "none", "wrong exception message");
         }
     }
 }

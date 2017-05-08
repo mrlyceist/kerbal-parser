@@ -23,7 +23,7 @@ namespace KerbalParser
         public KerbalNode Parent { get; set; }
 
         [DataMember(Order = 3)]
-        public IDictionary<string, string> Values { get; set; }
+        public PropertyDictionary<string, string> Values { get; set; }
         //public IDictionary<string, List<string>> Values { get; set; }
 
         [DataMember(Order = 4)]
